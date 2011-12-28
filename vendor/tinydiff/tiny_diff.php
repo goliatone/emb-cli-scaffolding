@@ -37,7 +37,7 @@ class Tiny_diff
 	public static $markers = array(
 		'mixed' 	=> array('ins_beg' => '<ins>+ ' , 'ins_end' => '</ins>PHP_EOL' ,'del_beg' => '<del>- ', 'del_end' => "</del>PHP_EOL" )
 		,'html'		=> array('ins_beg' => '<ins> ' , 'ins_end' => '</ins>PHP_EOL' ,'del_beg' => '<del> ', 'del_end' => "</del>PHP_EOL" )
-		,'normal' 	=> array('ins_beg' => '//>> + start diff' , 'ins_end' => 'PHP_EOL//<< + end diff' ,'del_beg' => '//>> - start diff ', 'del_end' => "PHP_EOL//<< - end diff" )
+		,'normal' 	=> array('ins_beg' => '//>+' , 'ins_end' => '//<+PHP_EOL' ,'del_beg' => '//>-', 'del_end' => "//<-" )
 		);
 		
 	/**
@@ -52,14 +52,6 @@ class Tiny_diff
 	public function compare($old, $new, $mode = 'normal')
 	{
 		
-		// Insert characters
-		$ins_end 	= $this->_get_marker($mode,'ins_end');
-		$ins_begin 	= $this->_get_marker($mode,'ins_beg');
-
-		// Delete characters
-		$del_end	= $this->_get_marker($mode,'del_end');
-		$del_begin 	= $this->_get_marker($mode,'del_beg');
-
 		// Turn the strings into an array so it's a bit easier to parse them
 		$diff	= $this->diff(explode(PHP_EOL, $old), explode(PHP_EOL, $new));
 		$result	= '';
@@ -68,8 +60,19 @@ class Tiny_diff
 		{
 			if(is_array($line))
 			{
-				$result .= !empty($line['del']) ? $del_begin.implode(PHP_EOL, $line['del']).$del_end : '';
-				$result .= !empty($line['ins']) ? $ins_begin.implode(PHP_EOL, $line['ins']).$ins_end : '';
+				$type = empty($line['del']) ? 'ins' : 'del';
+				// Delete and Insert characters
+				$line_end	= $this->_get_marker($mode,$type.'_end');
+				$line_beg 	= $this->_get_marker($mode,$type.'_beg');
+				$content	= $line[$type];
+				$test	    = preg_replace('/\s+/', '', $content);
+				/*TODO Need to test for 
+				//>-
+				//<-
+				*/
+				if($test == "$line_beg\n$line_end") $result .= ''; 
+				else $result .= !empty($content) ? $line_beg.implode(PHP_EOL, $content).$line_end : '';
+				
 			}
 			else
 			{

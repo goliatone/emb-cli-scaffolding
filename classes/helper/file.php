@@ -17,7 +17,7 @@ class Helper_File
 	 * @see	http://codeigniter.com/user_guide/helpers/file_helper.html
 	 * @return  array
 	 */
-	static public function get_filenames($source_dir, $include_path = FALSE, $recursion = FALSE, array $ignore =array(), array &$filedata = array())
+	static public function get_filenames($source_dir, $include_path = FALSE, $recursion = FALSE, array $ignore = array(), array &$filedata = array())
     {
 		$source_dir = self::ensure_trailing_slash($source_dir);
 		
@@ -37,7 +37,13 @@ class Helper_File
                 }
                 elseif (strncmp($file, '.', 1) !== 0)
                 {
-                	if(in_array($file,$ignore) || in_array($source_dir.$file,$ignore) ) continue;
+                	//Make more robust. Option to exclude all files under a certain directory as well.
+                	if(in_array($file,$ignore,TRUE) || in_array($source_dir.$file,$ignore,TRUE) )
+					{
+						CLI::write(PHP_EOL."File_Helper::get_filenames => Ignoring file {$file}");
+						continue;
+					}
+					
                     $filedata[] = ($include_path == TRUE) ? $source_dir.$file : $file;
                 }
             }
@@ -88,5 +94,30 @@ class Helper_File
 		//TODO Check for file extension, or ensure we have file.
 		return array_pop($dirs);
 		
+	}
+	
+	/**
+	 * 
+	 */
+	static public function assert_directory()
+	{
+		 $numargs = func_num_args();
+		 
+		 if($numargs == 1 )
+		 {
+		 	$directories = func_get_arg(0);
+		 	if(! is_array($directories))
+		 	{
+		 		//we have one single path
+		 		$directories = array($directories);
+		 	}
+		 }
+		 
+		 foreach($directories as $dir)
+		 {
+		 	if(!is_dir($dir)) return FALSE;
+		 }
+		 
+		 return TRUE;
 	}
 }

@@ -4,11 +4,15 @@ return array
 (
 	//default command options values --options
 	'command_options' => array(
+		//default project template
 		'project' => 'embcrud'
+		//directory for outputting generated stuff.
 		,'output' => 'generated'
-	),
+		,'module' => 'emb-cli-scaffolding'
+		,'ignore' => array('scaffolding.php','config.php')
+	)
 	//required command arguments => resource=user
-	'required' => array('resource')
+	,'required' => array('resource')
 	//default template arguments, we can pass as many as we need in our templates.
 	,'defaults' => array(
 		"theme" => "default"

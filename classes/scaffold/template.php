@@ -13,6 +13,7 @@ class Scaffold_Template
 	{
 		$this->source_path = $source_path;
 		$this->target_path = $target_path;
+		//$ext = pathinfo($target_path, PATHINFO_EXTENSION);
 	}
 	
 	
