@@ -23,7 +23,7 @@ class Command_Scaffold extends Command
 		CLI::write($t->test);
 	}
 	
-	public function index(Command_Options $options)
+	public function index(Command_Options $options = NULL)
 	{
 		CLI::write("*************************************".PHP_EOL);
 		CLI::write("Scaffold v".Command_Scaffold::VERSION);
@@ -35,6 +35,8 @@ class Command_Scaffold extends Command
 	
 	public function create(Command_Options $options)
 	{
+		$this->index();
+		
 		//get --project=embcrud => Project template we use.
 		$project = $options->get('project','embcrud');
 		
@@ -48,6 +50,10 @@ class Command_Scaffold extends Command
 		$output  = $options->get('output',$config->command_options['output']);
 		$target_dir = MODPATH.'emb-cli-scaffolding'.DS.$output;
 		
+		/* For some reason, this does not work from Helper_Scaffold::generate_templates
+		 * Make sure we have the target path:
+		 */
+		Helper_File::ensure_file_path($target_dir.DS.'ensure.php');
 		
 		try
 		{
@@ -59,9 +65,9 @@ class Command_Scaffold extends Command
 			return;
 		}
 		
-		//$args->set('resource','resource');
-		
 		$templates = Helper_Scaffold::generate_templates($source_dir, $target_dir, $args);
+		
+		//CLI::write(Kohana_Debug::dump($templates));
 		
 		foreach($templates as $template)
 		{
@@ -70,35 +76,4 @@ class Command_Scaffold extends Command
 		
 	}
 	
-	private function _ensure_file_path($module_name,$output_filename,$ext = '.php')
-	{
-		$file_path = MODPATH.$module_name.DIRECTORY_SEPARATOR.'output'.DIRECTORY_SEPARATOR.$output_filename.$ext;
-		
-		$path = explode(DIRECTORY_SEPARATOR,$file_path);
-		array_pop($path);
-		$path = implode(DIRECTORY_SEPARATOR,$path);
-		
-		if( ! is_dir($path)) mkdir($path,0777, true);
-		
-		return $file_path;
-	}
-	
-	static public function set_template($filename, $name, $decorations = null,$overwrite=FALSE)
-	{
-		$template_filename = Kohana::find_file('templates', $name, 'tpl');
-
-		if( ! $template_filename )
-			throw new Kohana_Exception("Kohana Exception does not exist: :name", array(":name" => $name));
-		
-		$template = file_get_contents($template_filename);
-
-		if( $decorations )
-		{
-			$m = new Mustache;
-			$template = $m->render($template, $decorations);
-			//$template = strtr($template, $decorations);   
-		}
-		
-		if( ! is_file($filename) || $overwrite) file_put_contents($filename, $template);
-	}
 }

@@ -69,12 +69,11 @@ class Helper_File
 	/**
 	 * 
 	 */
-	static public function ensure_file_path($file_path,$chmode = 0777)
+	static public function ensure_file_path($file_path, $chmode = 0777)
 	{
 		$path = self::file_path($file_path);
 		
-		
-		if( ! is_dir($path)) mkdir($path, $chmode, true);
+		if( ! is_dir($path)) mkdir($path, $chmode, TRUE);
 		
 		return $file_path;
 	}

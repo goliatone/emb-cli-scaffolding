@@ -6,3 +6,4 @@
 
 # Ignore generated content
 /output/*
+/generated/*

@@ -5,7 +5,7 @@ return array
 	//default command options values --options
 	'command_options' => array(
 		'project' => 'embcrud'
-		,'output' => 'output'
+		,'output' => 'generated'
 	),
 	//required command arguments => resource=user
 	'required' => array('resource')
