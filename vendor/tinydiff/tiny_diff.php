@@ -66,7 +66,7 @@ class Tiny_diff
 				$line_beg 	= $this->_get_marker($mode,$type.'_beg');
 				$content	= $line[$type];
 				$test	    = preg_replace('/\s+/', '', $content);
-				/*TODO Need to test for 
+				/*TODO Need to test for preg_match('/^\/\/>\s*\/\/</i', $content, $result);
 				//>-
 				//<-
 				*/
