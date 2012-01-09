@@ -17,6 +17,7 @@ class Scaffold_Template
 	}
 	
 	
+	
 	public function __toString()
 	{
 		return "[Scaffold_Template => \nsource: {$this->source_path},\ntarget: {$this->target_path}]";

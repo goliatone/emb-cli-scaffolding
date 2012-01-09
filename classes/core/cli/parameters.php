@@ -105,11 +105,25 @@ abstract class Core_CLI_Parameters implements ArrayAccess, Iterator, Countable
 	 */
 	public function __get($key)
 	{
+		CLI::write("get key: {$key}".PHP_EOL);
 		if(strpos($key,'has_') !== FALSE)
 		{
 			list($has, $key) = explode('_', $key, 2);
 		}
 		
+		//TODO, MERGE INTO SINGLE METHOD!
+		if(strpos($key,'_pluralize') !== FALSE)
+		{
+			list($key, $method ) = explode('_', $key, 2);
+			return Inflector::plural($this->offsetGet($key));
+		}
+		
+		if(strpos($key,'_capitalize') !== FALSE)
+		{
+			list($key, $method ) = explode('_', $key, 2);
+			return ucfirst($this->offsetGet($key));
+		}
+		///////////////////////////////////////////////
 		return $this->offsetGet($key);
 	}
 	
@@ -144,6 +158,17 @@ abstract class Core_CLI_Parameters implements ArrayAccess, Iterator, Countable
 		{
 			list($has, $name) = explode('_', $name, 2);
 		}
+		
+		// TODO merge into one method
+		if(strpos($name,'_pluralize') !== FALSE)
+		{
+			list($name, $method ) = explode('_', $name, 2);
+		}
+		if(strpos($name,'_capitalize') !== FALSE)
+		{
+			list($name, $method ) = explode('_', $name, 2);
+		}
+		////////////////////
 		
         return isset($this->_arguments[$name]);
     }

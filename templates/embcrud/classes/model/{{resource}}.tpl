@@ -4,7 +4,7 @@
  *
  * *
  */
-class Model_{{resource}} extends ORM {
+class Model_{{resource_capitalize}} extends ORM {
 
     /**
      * Name of the database to use
@@ -20,7 +20,7 @@ class Model_{{resource}} extends ORM {
      * @access	protected
      * @var		string	$_table_name default [singular model name]
      */
-    protected $_table_name = {{resource}};
+    protected $_table_name = '{{resource_pluralize}}';
 
     /**
      * Column to use as primary key

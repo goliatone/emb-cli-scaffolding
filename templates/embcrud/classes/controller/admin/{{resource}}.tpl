@@ -2,7 +2,7 @@
 /**
  * Class <code>Controller_{{resource}}</code>.
  */
-class Controller_{{resource}} extends {{admin_controller}} {
+class Controller_Admin_{{resource_capitalize}} extends {{admin_controller}} {
 	{{#has_template}}
 	/**
 	 * @var  View  page template
